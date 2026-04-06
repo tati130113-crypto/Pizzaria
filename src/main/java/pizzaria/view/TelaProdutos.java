@@ -1,5 +1,6 @@
 package pizzaria.view;
 // commit 1 - botão salvar funcionando
+// commit 2 - listagem de produtos funcionando
 import pizzaria.dao.ProdutoDAO;
 import pizzaria.dao.CategoriaDAO;
 import pizzaria.model.Produto;
