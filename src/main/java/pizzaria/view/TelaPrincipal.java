@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import pizzaria.view.TelaProdutos;
 
 public class TelaPrincipal extends JFrame {
     private Usuario usuario;
@@ -125,7 +126,7 @@ public class TelaPrincipal extends JFrame {
     
     private void abrirTelaProdutos() {
         if (usuario.getTipoUsuario().equals("admin")) {
-            TelaProdutos telaProdutos = new TelaProdutos(this);
+            TelaProdutos telaProdutos = new TelaProdutos();
             telaProdutos.setVisible(true);
         }
     }

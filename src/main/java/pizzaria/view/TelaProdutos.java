@@ -1,6 +1,5 @@
 package pizzaria.view;
-// commit 1 - botão salvar funcionando
-// commit 2 - listagem de produtos funcionando
+
 import pizzaria.dao.ProdutoDAO;
 import pizzaria.dao.CategoriaDAO;
 import pizzaria.model.Produto;
@@ -13,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class TelaProdutos extends JDialog {
+public class TelaProdutos extends JFrame {
 
     private JTextField txtNome;
     private JTextField txtPreco;
@@ -29,8 +28,12 @@ public class TelaProdutos extends JDialog {
 
     private int produtoSelecionadoId = -1;
 
-    public TelaProdutos(JFrame parent) {
-        super(parent, "Gerenciar Produtos", true);
+    public TelaProdutos() {
+
+        setTitle("Cadastro de Produtos");
+        setSize(900,600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         produtoDAO = new ProdutoDAO();
         categoriaDAO = new CategoriaDAO();
@@ -42,16 +45,11 @@ public class TelaProdutos extends JDialog {
 
     private void initComponents() {
 
-        setSize(900, 600);
-        setLocationRelativeTo(getParent());
-        setLayout(new BorderLayout());
-
         JPanel panel = new JPanel(new BorderLayout(10,10));
         panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        // FORM
         JPanel form = new JPanel(new GridBagLayout());
-        form.setBorder(BorderFactory.createTitledBorder("Cadastro Produto"));
+        form.setBorder(BorderFactory.createTitledBorder("Dados do Produto"));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
@@ -61,7 +59,7 @@ public class TelaProdutos extends JDialog {
         gbc.gridy = 0;
         form.add(new JLabel("Nome:"), gbc);
 
-        txtNome = new JTextField(25);
+        txtNome = new JTextField(20);
         gbc.gridx = 1;
         form.add(txtNome, gbc);
 
@@ -99,7 +97,6 @@ public class TelaProdutos extends JDialog {
         gbc.gridx = 1;
         form.add(txtEstoque, gbc);
 
-        // BOTÕES
         JPanel botoes = new JPanel();
 
         JButton btnNovo = new JButton("Novo");
@@ -113,15 +110,15 @@ public class TelaProdutos extends JDialog {
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
+
         form.add(botoes, gbc);
 
         panel.add(form, BorderLayout.NORTH);
 
-        // TABELA
         tableModel = new DefaultTableModel(
                 new Object[]{"ID","Nome","Categoria","Preço","Estoque"},0){
 
-            public boolean isCellEditable(int row,int col){
+            public boolean isCellEditable(int row,int column){
                 return false;
             }
         };
@@ -141,13 +138,13 @@ public class TelaProdutos extends JDialog {
 
         add(panel);
 
-        // EVENTOS
         btnNovo.addActionListener(e -> limpar());
         btnSalvar.addActionListener(e -> salvar());
         btnExcluir.addActionListener(e -> excluir());
     }
 
     private void carregarCategorias() {
+
         cbCategoria.removeAllItems();
 
         List<Categoria> lista = categoriaDAO.listarTodos();
@@ -158,6 +155,7 @@ public class TelaProdutos extends JDialog {
     }
 
     private void carregarTabela() {
+
         tableModel.setRowCount(0);
 
         List<Produto> lista = produtoDAO.listarTodos();
@@ -227,11 +225,8 @@ public class TelaProdutos extends JDialog {
             boolean sucesso;
 
             if(produtoSelecionadoId == -1){
-
                 sucesso = produtoDAO.inserir(p);
-
             }else{
-
                 p.setId(produtoSelecionadoId);
                 sucesso = produtoDAO.atualizar(p);
             }
@@ -256,5 +251,13 @@ public class TelaProdutos extends JDialog {
             carregarTabela();
             limpar();
         }
+    }
+
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> {
+            new TelaProdutos().setVisible(true);
+        });
+
     }
 }
